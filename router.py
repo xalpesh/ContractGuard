@@ -1,12 +1,10 @@
-from typing import Any, Dict, Literal
+from typing import Any, Dict
 from langgraph.checkpoint.memory import MemorySaver
 from langgraph.graph import END, START, StateGraph
 
 from models import InvoiceTrack
 from state import InvoiceComplianceState
-from reasoner import compliance_reasoner_node as material_reasoner_node
-from service_reasoner import service_compliance_reasoner_node as service_reasoner_node
-from hitl_workflow import human_review_node, dispatcher_node, route_after_reasoning
+from agents import compliance_agent_node, posting_agent_node
 
 
 def _infer_invoice_track(state: InvoiceComplianceState) -> InvoiceTrack:
@@ -35,65 +33,21 @@ def _infer_invoice_track(state: InvoiceComplianceState) -> InvoiceTrack:
 
 
 def invoice_router_node(state: InvoiceComplianceState) -> Dict[str, Any]:
-   try:
-       determined_track = _infer_invoice_track(state)
-       return {"track": determined_track.value, "processing_errors": []}
-   except Exception as exc:
-       return {"track": None, "processing_errors": state.get("processing_errors", []) + [str(exc)]}
-
-
-def routing_error_fallback_node(state: InvoiceComplianceState) -> Dict[str, Any]:
-   errors = state.get("processing_errors") or ["Unknown classification error."]
-   memo = "## Automated Routing Failure\n- " + "\n- ".join(errors)
-   return {
-       "requires_human_approval": True,
-       "human_notes": "Routing failure: manual classification required.",
-       "generated_vendor_email": memo,
-   }
-
-
-def route_by_track(state: InvoiceComplianceState) -> Literal["material_reasoner", "service_reasoner", "routing_error_fallback"]:
-   track = state.get("track")
-   if track == InvoiceTrack.MATERIAL.value:
-       return "material_reasoner"
-   elif track == InvoiceTrack.SERVICE.value:
-       return "service_reasoner"
-   return "routing_error_fallback"
+   determined_track = _infer_invoice_track(state)
+   return {"track": determined_track.value, "processing_errors": []}
 
 
 def build_unified_compliance_graph():
+   """Specialist swarm: router -> Compliance Agent -> Posting Agent."""
    builder = StateGraph(InvoiceComplianceState)
 
    builder.add_node("invoice_router", invoice_router_node)
-   builder.add_node("material_reasoner", material_reasoner_node)
-   builder.add_node("service_reasoner", service_reasoner_node)
-   builder.add_node("routing_error_fallback", routing_error_fallback_node)
-   builder.add_node("human_review_node", human_review_node)
-   builder.add_node("dispatcher_node", dispatcher_node)
+   builder.add_node("compliance_agent", compliance_agent_node)
+   builder.add_node("posting_agent", posting_agent_node)
 
    builder.add_edge(START, "invoice_router")
-   builder.add_conditional_edges(
-       "invoice_router",
-       route_by_track,
-       {
-           "material_reasoner": "material_reasoner",
-           "service_reasoner": "service_reasoner",
-           "routing_error_fallback": "routing_error_fallback",
-       },
-   )
-
-   for reasoner_node in ("material_reasoner", "service_reasoner"):
-       builder.add_conditional_edges(
-           reasoner_node,
-           route_after_reasoning,
-           {
-               "human_review_node": "human_review_node",
-               "dispatcher_node": "dispatcher_node",
-           },
-       )
-
-   builder.add_edge("routing_error_fallback", "human_review_node")
-   builder.add_edge("human_review_node", "dispatcher_node")
-   builder.add_edge("dispatcher_node", END)
+   builder.add_edge("invoice_router", "compliance_agent")
+   builder.add_edge("compliance_agent", "posting_agent")
+   builder.add_edge("posting_agent", END)
 
    return builder.compile(checkpointer=MemorySaver())

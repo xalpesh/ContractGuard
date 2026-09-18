@@ -12,6 +12,10 @@ from models import (
 )
 
 
+def _merge_traces(left: Optional[Dict[str, list]], right: Optional[Dict[str, list]]) -> Dict[str, list]:
+   return {**(left or {}), **(right or {})}
+
+
 class InvoiceComplianceState(TypedDict):
    invoice_raw_path: str
    contract_raw_path: str
@@ -33,6 +37,10 @@ class InvoiceComplianceState(TypedDict):
 
    generated_erp_payload: Optional[Dict]
    generated_vendor_email: Optional[str]
+
+   compliance_verdict: Optional[Dict]
+   posting_result: Optional[str]
+   agent_trace: Annotated[Dict[str, list], _merge_traces]
 
    messages: Annotated[list, add_messages]
    processing_errors: List[str]

@@ -35,6 +35,7 @@ class ComplianceStatus(str, Enum):
    APPROVED = "APPROVED"
    AUTO_REJECTED = "AUTO_REJECTED"
    FLAGGED_FOR_REVIEW = "FLAGGED_FOR_REVIEW"
+   RETURNED_TO_VENDOR = "RETURNED_TO_VENDOR"
 
 
 class MaterialContractTerms(BaseModel):
