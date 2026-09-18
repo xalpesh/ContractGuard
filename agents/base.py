@@ -2,18 +2,27 @@ import json
 import os
 from typing import Any, Callable, Dict, List, Optional, Tuple
 
-try:
-   from dotenv import load_dotenv
+ENV_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), ".env")
 
-   load_dotenv()  # reads ANTHROPIC_API_KEY / ANTHROPIC_MODEL from a local .env file
-except ImportError:
-   pass
+
+def _load_env() -> None:
+   """(Re)load the project .env so a key saved after startup is picked up without a restart."""
+   try:
+       from dotenv import load_dotenv
+
+       load_dotenv(ENV_PATH, override=True)
+   except ImportError:
+       pass
+
+
+_load_env()
 
 DEFAULT_MODEL = "claude-sonnet-5"
 MAX_TURNS = 8
 
 
 def llm_available() -> bool:
+   _load_env()
    return bool(os.getenv("ANTHROPIC_API_KEY"))
 
 

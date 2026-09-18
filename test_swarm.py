@@ -18,6 +18,8 @@ from agents.posting_agent import posting_agent_node
 @pytest.fixture(autouse=True)
 def no_api_key(monkeypatch):
    # .env may supply a real key at import time; tests must exercise the deterministic path.
+   import agents.base
+   monkeypatch.setattr(agents.base, "_load_env", lambda: None)
    monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
 
 
