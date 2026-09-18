@@ -1,0 +1,66 @@
+{
+ "contract_terms": {
+   "contract_id": "CTR-MAT-2026-081",
+   "vendor_id": "VEND-SOLVENTS-INC",
+   "effective_date": "2026-01-15",
+   "incoterm": "DDP",
+   "quantity_tolerance_pct": 5.0,
+   "freight_allowed": false,
+   "packaging_fees_allowed": false,
+   "index_name": "ICIS_RESIN",
+   "index_baseline_value": 800.0,
+   "index_pass_through_coefficient": 0.5,
+   "base_material_unit_price": {
+     "SOLVENT-X": 1200.0,
+     "POLY-RESIN-A": 450.0
+   }
+ },
+ "goods_receipts": [
+   {
+     "gr_number": "GR-901124",
+     "po_number": "PO-88231",
+     "line_item": 1,
+     "material_sku": "SOLVENT-X",
+     "received_quantity": 100.0,
+     "accepted_quantity": 95.0,
+     "rejected_quantity": 5.0,
+     "uom": "MT",
+     "dock_receipt_date": "2026-09-12",
+     "scale_ticket_id": "SCALE-TX-4402"
+   }
+ ],
+ "external_indices": {
+   "ICIS_RESIN": 840.0
+ },
+ "invoice": {
+   "invoice_number": "INV-2026-9981",
+   "vendor_id": "VEND-SOLVENTS-INC",
+   "invoice_date": "2026-09-15",
+   "track": "MATERIAL",
+   "line_items": [
+     {
+       "line_number": 1,
+       "item_type": "MATERIAL",
+       "sku_or_role": "SOLVENT-X",
+       "description": "Industrial Grade Solvent X - Bulk Delivery",
+       "billed_quantity": 100.0,
+       "billed_unit_price": 1250.0,
+       "total_line_amount": 125000.0,
+       "po_or_sow_reference": "PO-88231"
+     }
+   ],
+   "additional_charges": [
+     {
+       "charge_type": "Emergency Fuel Surcharge",
+       "amount": 1200.0,
+       "clause_justification": "Carrier linehaul diesel adjustment"
+     },
+     {
+       "charge_type": "Pallet & Restaging Fee",
+       "amount": 350.0,
+       "clause_justification": "Handling fee for specialized drum return"
+     }
+   ],
+   "total_invoiced_amount": 126550.0
+ }
+}

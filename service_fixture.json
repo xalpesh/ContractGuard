@@ -1,0 +1,107 @@
+{
+ "contract_terms": {
+   "contract_id": "MSA-SRV-2026-004",
+   "vendor_id": "VEND-PLANT-MAINT-CORP",
+   "effective_date": "2026-02-01",
+   "sow_total_budget_cap": 15000.0,
+   "rate_cards": {
+     "Master Millwright": {
+       "role_name": "Master Millwright",
+       "required_certification": "NCCER_ADVANCED",
+       "standard_hourly_rate": 140.0,
+       "overtime_multiplier": 1.5,
+       "overtime_requires_preapproval": true,
+       "max_authorized_hours": 80.0,
+       "downgrade_role_fallback": "General Mechanic"
+     },
+     "General Mechanic": {
+       "role_name": "General Mechanic",
+       "required_certification": null,
+       "standard_hourly_rate": 85.0,
+       "overtime_multiplier": 1.5,
+       "overtime_requires_preapproval": true,
+       "max_authorized_hours": 120.0
+     },
+     "L3 Vibration Specialist": {
+       "role_name": "L3 Vibration Specialist",
+       "required_certification": "ISO_18436_CAT_III",
+       "standard_hourly_rate": 175.0,
+       "overtime_multiplier": 2.0,
+       "overtime_requires_preapproval": true,
+       "max_authorized_hours": 40.0,
+       "downgrade_role_fallback": "General Mechanic"
+     }
+   },
+   "per_diem_daily_cap": 65.0,
+   "mileage_rate_allowed": 0.67,
+   "tool_allowance_cap": 500.0
+ },
+ "service_entry_sheets": [
+   {
+     "ses_number": "SES-2026-00412",
+     "sow_number": "SOW-TURBINE-OVERHAUL",
+     "line_item": 1,
+     "technician_name": "Marcus Vance",
+     "role_classified": "L3 Vibration Specialist",
+     "technician_certifications": ["OSHA_10"],
+     "badge_in_time": "2026-09-08T07:00:00Z",
+     "badge_out_time": "2026-09-11T16:00:00Z",
+     "regular_hours": 32.0,
+     "overtime_hours": 8.0,
+     "verified_hours": 40.0,
+     "overtime_preapproved": false,
+     "work_order_id": "WO-PLANT-0941"
+   },
+   {
+     "ses_number": "SES-2026-00413",
+     "sow_number": "SOW-TURBINE-OVERHAUL",
+     "line_item": 2,
+     "technician_name": "Dave Briggs",
+     "role_classified": "Master Millwright",
+     "technician_certifications": ["NCCER_ADVANCED"],
+     "badge_in_time": "2026-09-08T07:00:00Z",
+     "badge_out_time": "2026-09-12T16:30:00Z",
+     "regular_hours": 40.0,
+     "overtime_hours": 0.0,
+     "verified_hours": 40.0,
+     "overtime_preapproved": false,
+     "work_order_id": "WO-PLANT-0941"
+   }
+ ],
+ "invoice": {
+   "invoice_number": "INV-TURB-7740",
+   "vendor_id": "VEND-PLANT-MAINT-CORP",
+   "invoice_date": "2026-09-14",
+   "track": "SERVICE",
+   "line_items": [
+     {
+       "line_number": 1,
+       "item_type": "SERVICE",
+       "sku_or_role": "L3 Vibration Specialist",
+       "description": "Onsite dynamic balancing and diagnostic logging",
+       "billed_quantity": 50.0,
+       "billed_unit_price": 195.0,
+       "total_line_amount": 9750.0,
+       "po_or_sow_reference": "SOW-TURBINE-OVERHAUL"
+     },
+     {
+       "line_number": 2,
+       "item_type": "SERVICE",
+       "sku_or_role": "Master Millwright",
+       "description": "Turbine casing alignment and torque verification",
+       "billed_quantity": 40.0,
+       "billed_unit_price": 155.0,
+       "total_line_amount": 6200.0,
+       "po_or_sow_reference": "SOW-TURBINE-OVERHAUL"
+     }
+   ],
+   "additional_charges": [
+     {
+       "charge_type": "Per Diem - Meals & Lodging",
+       "amount": 380.0,
+       "clause_justification": "4 days travel per diem at $95.00/day"
+     }
+   ],
+   "total_invoiced_amount": 16330.0
+ }
+}
